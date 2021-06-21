@@ -1,11 +1,13 @@
 import React from 'react';
-import Landing from './pages/Landing/index';
+import {ToastContainer} from "react-toastify";
 import './assets/styles/global.css';
 import Routes from "./routes";
 
 function App() {
-    return (
-        <Routes/>
+    return (<>
+            <ToastContainer/>
+            <Routes/>
+        </>
     );
 }
 

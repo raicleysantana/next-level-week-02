@@ -1,34 +1,64 @@
 import React from "react";
 import './styles.css';
 import whatsappIcon from "../../assets/imagens/icons/whatsapp.svg";
+import api from "../../services/api";
 
-function TeacherItem() {
+export interface Teacher {
+    id: number;
+    avatar: string;
+    bio: string;
+    cost: number;
+    name: string;
+    subject: string;
+    whatsapp: string;
+}
+
+interface teacherItemProps {
+    teacher: Teacher
+}
+
+const getWhatsapp = (numero: string) => {
+    let output = numero;
+    output = output.replace(/[^0-9+]/g, '');
+    return output;
+}
+
+const TeacherItem: React.FC<teacherItemProps> = ({teacher}) => {
+
+    function createNewConnection() {
+        api.post('connections', {
+            user_id: teacher.id
+        });
+    }
+
     return (
         <article className="teacher-item">
             <header>
                 <img
-                    src="https://scontent.fpll4-1.fna.fbcdn.net/v/t1.0-9/133207102_1129732137460394_8719449655786547386_o.jpg?_nc_cat=104&ccb=3&_nc_sid=09cbfe&_nc_ohc=0p9bkY6T8zEAX-CFY8L&_nc_ht=scontent.fpll4-1.fna&oh=9d98dad35917122fe34dda3c2f2b3d09&oe=604EDF25"
-                    alt=""
+                    src={teacher.avatar}
+                    alt={teacher.name}
                 />
                 <div>
-                    <strong>Raicley santana</strong>
-                    <span>Quimica</span>
+                    <strong>{teacher.name}</strong>
+                    <span>{teacher.subject}</span>
                 </div>
             </header>
 
             <p>
-                Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has
-                been<br/>
-                the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley
-                of type and scrambled it to make a type specimen book.
+                {teacher.bio}
             </p>
             <footer>
                 <p>
-                    Preço por hora <strong>R$ 80,00</strong>
+                    Preço por hora <strong>R$ {teacher.cost}</strong>
                 </p>
-                <button type="button">
+                <a
+                    target="_blank"
+                    onClick={createNewConnection}
+                    href={`https://wa.me/${getWhatsapp(teacher.whatsapp)}`}
+                    type="button"
+                >
                     <img src={whatsappIcon} alt="Whatsapp"/> Entrar em contato
-                </button>
+                </a>
             </footer>
         </article>
     );
